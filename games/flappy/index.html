@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Flappy Neon — NEXUS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/game.css">
+  <style>:root{--grad:linear-gradient(135deg,#f59e0b,#10b981);--bord:rgba(245,158,11,.2);--accent:#f59e0b;}</style>
+</head>
+<body>
+<div id="loading-screen"><div class="load-logo">NEXUS</div><div class="load-title">🐦 FLAPPY NEON</div><div class="load-bar-wrap"><div class="load-bar" id="load-bar"></div></div><div class="load-hint">Calibrating thrusters...</div></div>
+<div class="top-bar">
+  <a href="../../index.html" class="back-btn">← Back to NEXUS</a>
+  <div class="game-title-bar"><span class="game-emoji-sm">🐦</span><span class="game-name">FLAPPY NEON</span></div>
+  <div class="ctrl-btns"><button class="ctrl-btn" id="restartBtn">↺ Restart</button></div>
+</div>
+<div class="hud">
+  <div class="hud-item">🏆 Score <span class="hud-val" id="scoreDisplay">0</span></div>
+  <div class="hud-item" style="margin-left:auto">Best <span class="hud-val" id="bestDisplay">0</span></div>
+</div>
+<div class="game-area" style="background:#050508;">
+  <canvas id="gameCanvas"></canvas>
+  <div class="game-overlay" id="startOverlay">
+    <div class="overlay-emoji">🐦</div>
+    <div class="overlay-title overlay-grad">FLAPPY NEON</div>
+    <div class="overlay-sub">Tap or press Space to flap!</div>
+    <button class="overlay-btn" id="startBtn">▶ START GAME</button>
+    <div class="overlay-hint">Space / Click to flap</div>
+  </div>
+  <div class="game-overlay hidden" id="gameOverOverlay">
+    <div style="font-size:64px">💀</div>
+    <div class="overlay-title" style="color:#ef4444">GAME OVER</div>
+    <div class="overlay-score" id="finalScore">Score: 0</div>
+    <button class="overlay-btn" id="retryBtn">↺ Try Again</button>
+    <a href="../../index.html" class="overlay-link">Return to NEXUS</a>
+  </div>
+</div>
+<div class="controls-help">
+  <div class="ctrl-hint"><span class="key">Space</span> Flap</div>
+  <div class="ctrl-hint"><span class="key">Click</span> Flap</div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>

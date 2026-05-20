@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Cyber Minesweeper — NEXUS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/game.css">
+  <style>
+    :root{--grad:linear-gradient(135deg,#3b82f6,#10b981);--bord:rgba(59,130,246,.2);--accent:#3b82f6;}
+    #gameCanvas{cursor:default;}
+  </style>
+</head>
+<body>
+<div id="loading-screen"><div class="load-logo">NEXUS</div><div class="load-title">💣 CYBER MINESWEEPER</div><div class="load-bar-wrap"><div class="load-bar" id="load-bar"></div></div><div class="load-hint">Scanning minefield...</div></div>
+<div class="top-bar">
+  <a href="../../index.html" class="back-btn">← Back to NEXUS</a>
+  <div class="game-title-bar"><span class="game-emoji-sm">💣</span><span class="game-name">CYBER MINESWEEPER</span></div>
+  <div class="ctrl-btns">
+    <select class="ctrl-btn" id="diffSelect" style="cursor:pointer;">
+      <option value="easy">Easy 9×9</option>
+      <option value="medium" selected>Medium 16×16</option>
+      <option value="hard">Hard 30×16</option>
+    </select>
+    <button class="ctrl-btn" id="restartBtn">↺ New Game</button>
+  </div>
+</div>
+<div class="hud">
+  <div class="hud-item">💣 Mines <span class="hud-val" id="mineCount">40</span></div>
+  <div class="hud-item">🚩 Flags <span class="hud-val" id="flagCount">0</span></div>
+  <div class="hud-item">⏱ Time <span class="hud-val" id="timeDisplay">0</span></div>
+  <div class="hud-item" style="margin-left:auto">Best <span class="hud-val" id="bestDisplay">--</span></div>
+</div>
+<div class="game-area" style="background:#050508;overflow:auto;">
+  <canvas id="gameCanvas"></canvas>
+  <div class="game-overlay" id="startOverlay">
+    <div class="overlay-emoji">💣</div>
+    <div class="overlay-title overlay-grad">CYBER MINESWEEPER</div>
+    <div class="overlay-sub">Reveal all safe cells — first click is always safe!</div>
+    <button class="overlay-btn" id="startBtn">▶ START GAME</button>
+    <div class="overlay-hint">Left Click = Reveal · Right Click = Flag</div>
+  </div>
+  <div class="game-overlay hidden" id="gameOverOverlay">
+    <div style="font-size:64px">💥</div>
+    <div class="overlay-title" style="color:#ef4444">BOOM!</div>
+    <div class="overlay-score">You hit a mine!</div>
+    <button class="overlay-btn" id="retryBtn">↺ Try Again</button>
+  </div>
+  <div class="game-overlay hidden" id="winOverlay">
+    <div style="font-size:64px">🏆</div>
+    <div class="overlay-title overlay-grad">CLEARED!</div>
+    <div class="overlay-score" id="winTime">Time: 0s</div>
+    <button class="overlay-btn" id="playAgainBtn">▶ Play Again</button>
+  </div>
+</div>
+<div class="controls-help">
+  <div class="ctrl-hint"><span class="key">Left Click</span> Reveal</div>
+  <div class="ctrl-hint"><span class="key">Right Click</span> Flag</div>
+  <div class="ctrl-hint"><span class="key">Middle Click</span> Chord</div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>

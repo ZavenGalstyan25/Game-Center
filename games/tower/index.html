@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Cyber Tower Defense — NEXUS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/game.css">
+  <style>
+    :root{--grad:linear-gradient(135deg,#7c3aed,#06b6d4);--bord:rgba(124,58,237,.2);--accent:#7c3aed;}
+    .tower-panel{display:flex;gap:6px;padding:8px 16px;background:rgba(8,8,16,.8);border-top:1px solid var(--bord);flex-shrink:0;align-items:center;flex-wrap:wrap;}
+    .tower-btn{padding:6px 12px;border-radius:8px;font-size:12px;font-weight:700;border:1px solid rgba(255,255,255,.2);color:#e8eaff;cursor:pointer;background:rgba(255,255,255,.06);transition:all .2s;font-family:'Exo 2',sans-serif;}
+    .tower-btn:hover,.tower-btn.selected{background:var(--grad);border-color:transparent;}
+    .tower-btn span{font-size:10px;color:rgba(255,255,255,.5);display:block;}
+    #gameCanvas{cursor:pointer;}
+  </style>
+</head>
+<body>
+<div id="loading-screen"><div class="load-logo">NEXUS</div><div class="load-title">🏰 CYBER TOWER DEFENSE</div><div class="load-bar-wrap"><div class="load-bar" id="load-bar"></div></div><div class="load-hint">Deploying defenses...</div></div>
+<div class="top-bar">
+  <a href="../../index.html" class="back-btn">← Back to NEXUS</a>
+  <div class="game-title-bar"><span class="game-emoji-sm">🏰</span><span class="game-name">CYBER TOWER DEFENSE</span></div>
+  <div class="ctrl-btns"><button class="ctrl-btn" id="nextWaveBtn">▶ Next Wave</button><button class="ctrl-btn" id="restartBtn">↺ Restart</button></div>
+</div>
+<div class="hud">
+  <div class="hud-item">💰 Gold <span class="hud-val" id="goldDisplay">100</span></div>
+  <div class="hud-item">❤️ Lives <span class="hud-val" id="livesDisplay">20</span></div>
+  <div class="hud-item">🌊 Wave <span class="hud-val" id="waveDisplay">0</span></div>
+  <div class="hud-item">🏆 Score <span class="hud-val" id="scoreDisplay">0</span></div>
+</div>
+<div class="game-area" style="background:#050508;padding:0;">
+  <canvas id="gameCanvas"></canvas>
+  <div class="game-overlay" id="startOverlay">
+    <div class="overlay-emoji">🏰</div>
+    <div class="overlay-title overlay-grad">CYBER TOWER DEFENSE</div>
+    <div class="overlay-sub">Build towers to stop the enemy waves! Select a tower type below, then click on the map to place it.</div>
+    <button class="overlay-btn" id="startBtn">▶ START GAME</button>
+    <div class="overlay-hint">Select tower → Click grid to place</div>
+  </div>
+  <div class="game-overlay hidden" id="gameOverOverlay">
+    <div style="font-size:64px">💀</div>
+    <div class="overlay-title" style="color:#ef4444">BASE DESTROYED!</div>
+    <div class="overlay-score" id="finalScore">Score: 0</div>
+    <div id="finalWave" style="font-size:14px;color:var(--text2)">Wave: 0</div>
+    <button class="overlay-btn" id="retryBtn">↺ Try Again</button>
+    <a href="../../index.html" class="overlay-link">Return to NEXUS</a>
+  </div>
+</div>
+<div class="tower-panel">
+  <div style="color:rgba(255,255,255,.5);font-size:11px;font-weight:700;white-space:nowrap;">SELECT TOWER:</div>
+  <button class="tower-btn selected" id="btn-gun" data-tower="gun">🔫 Gun<span>50💰 Fast</span></button>
+  <button class="tower-btn" id="btn-laser" data-tower="laser">⚡ Laser<span>80💰 Slow+Pierce</span></button>
+  <button class="tower-btn" id="btn-cannon" data-tower="cannon">💣 Cannon<span>120💰 AoE</span></button>
+  <button class="tower-btn" id="btn-freeze" data-tower="freeze">❄️ Freeze<span>100💰 Slows</span></button>
+  <div style="flex:1"></div>
+  <div style="color:rgba(255,255,255,.4);font-size:10px;">Right-click tower to sell (50%)</div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>

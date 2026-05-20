@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Cyber Mini Golf — NEXUS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/game.css">
+  <style>:root{--grad:linear-gradient(135deg,#10b981,#3b82f6);--bord:rgba(16,185,129,.2);--accent:#10b981;}
+  #gameCanvas{cursor:crosshair;}</style>
+</head>
+<body>
+<div id="loading-screen"><div class="load-logo">NEXUS</div><div class="load-title">⛳ CYBER MINI GOLF</div><div class="load-bar-wrap"><div class="load-bar" id="load-bar"></div></div><div class="load-hint">Designing course...</div></div>
+<div class="top-bar">
+  <a href="../../index.html" class="back-btn">← Back to NEXUS</a>
+  <div class="game-title-bar"><span class="game-emoji-sm">⛳</span><span class="game-name">CYBER MINI GOLF</span></div>
+  <div class="ctrl-btns"><button class="ctrl-btn" id="restartBtn">↺ Restart</button></div>
+</div>
+<div class="hud">
+  <div class="hud-item">⛳ Hole <span class="hud-val" id="holeDisplay">1/5</span></div>
+  <div class="hud-item">⛏ Strokes <span class="hud-val" id="strokeDisplay">0</span></div>
+  <div class="hud-item">📊 Total <span class="hud-val" id="totalDisplay">0</span></div>
+  <div class="hud-item" style="margin-left:auto">Par <span class="hud-val" id="parDisplay">3</span></div>
+</div>
+<div class="game-area" style="background:#050508;">
+  <canvas id="gameCanvas"></canvas>
+  <div class="game-overlay" id="startOverlay">
+    <div class="overlay-emoji">⛳</div>
+    <div class="overlay-title overlay-grad">CYBER MINI GOLF</div>
+    <div class="overlay-sub">5 holes of neon mini golf! Click-drag to aim and power up your shot.</div>
+    <button class="overlay-btn" id="startBtn">▶ START GAME</button>
+    <div class="overlay-hint">Click and hold — drag to aim, release to shoot</div>
+  </div>
+  <div class="game-overlay hidden" id="holeCompleteOverlay">
+    <div class="overlay-emoji" id="holeEmoji">⛳</div>
+    <div class="overlay-title overlay-grad" id="holeResult">Hole 1</div>
+    <div class="overlay-score" id="holeStrokes">3 strokes</div>
+    <button class="overlay-btn" id="nextHoleBtn">▶ Next Hole</button>
+  </div>
+  <div class="game-overlay hidden" id="gameOverOverlay">
+    <div style="font-size:64px">🏆</div>
+    <div class="overlay-title overlay-grad">COURSE COMPLETE!</div>
+    <div class="overlay-score" id="finalScore">Total: 0 strokes</div>
+    <button class="overlay-btn" id="retryBtn">↺ Play Again</button>
+    <a href="../../index.html" class="overlay-link">Return to NEXUS</a>
+  </div>
+</div>
+<div class="controls-help">
+  <div class="ctrl-hint"><span class="key">Click+Drag</span> Aim & Power</div>
+  <div class="ctrl-hint"><span class="key">Release</span> Shoot</div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>

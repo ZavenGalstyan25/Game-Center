@@ -1,9 +1,351 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body></body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEXUS — Gaming Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;800;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/animations.css">
+</head>
+<body class="theme-dark">
+
+  <!-- Particle Background -->
+  <canvas id="particles-canvas"></canvas>
+
+  <!-- Scanline Overlay -->
+  <div class="scanlines"></div>
+
+  <!-- ===== HEADER ===== -->
+  <header class="header" id="header">
+    <div class="header-left">
+      <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle Sidebar">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="logo">
+        <div class="logo-icon">N</div>
+        <div class="logo-text">
+          <span class="logo-main">NEXUS</span>
+          <span class="logo-sub">GAMING CENTER</span>
+        </div>
+      </div>
+    </div>
+
+    <nav class="main-nav">
+      <button class="nav-btn active" data-section="all">Home</button>
+      <button class="nav-btn" data-section="featured">Featured</button>
+      <button class="nav-btn" data-section="trending">Trending</button>
+      <button class="nav-btn" data-section="new">New Releases</button>
+      <button class="nav-btn" data-section="favorites">Favorites</button>
+    </nav>
+
+    <div class="header-right">
+      <div class="online-indicator">
+        <div class="pulse-dot"></div>
+        <span id="online-count">0</span> Online
+      </div>
+      <button class="notif-btn" id="notif-btn" aria-label="Notifications">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+        <span class="notif-badge" id="notif-badge">3</span>
+      </button>
+      <div class="user-profile" id="user-profile-btn">
+        <div class="user-avatar">Z</div>
+        <div class="user-info">
+          <span class="user-name">Zaven</span>
+          <span class="user-level">Level 42</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== APP CONTAINER ===== -->
+  <div class="app-container">
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-inner">
+
+        <!-- Search -->
+        <div class="search-container">
+          <div class="search-box">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+            </svg>
+            <input type="text" id="search-input" placeholder="Search games..." autocomplete="off">
+            <button class="search-clear" id="search-clear">✕</button>
+          </div>
+        </div>
+
+        <!-- Categories -->
+        <div class="sidebar-section">
+          <h3 class="sidebar-title">Categories</h3>
+          <div class="categories-list" id="categories-list">
+            <button class="category-btn active" data-category="all">
+              <span class="cat-icon">🎮</span>
+              <span class="cat-label">All Games</span>
+              <span class="cat-count">27</span>
+            </button>
+            <button class="category-btn" data-category="shooter">
+              <span class="cat-icon">🚀</span>
+              <span class="cat-label">Shooter</span>
+              <span class="cat-count">4</span>
+            </button>
+            <button class="category-btn" data-category="racing">
+              <span class="cat-icon">🏎️</span>
+              <span class="cat-label">Racing</span>
+              <span class="cat-count">1</span>
+            </button>
+            <button class="category-btn" data-category="sports">
+              <span class="cat-icon">⚽</span>
+              <span class="cat-label">Sports</span>
+              <span class="cat-count">4</span>
+            </button>
+            <button class="category-btn" data-category="platformer">
+              <span class="cat-icon">🕹️</span>
+              <span class="cat-label">Platformer</span>
+              <span class="cat-count">2</span>
+            </button>
+            <button class="category-btn" data-category="survival">
+              <span class="cat-icon">🧟</span>
+              <span class="cat-label">Survival</span>
+              <span class="cat-count">1</span>
+            </button>
+            <button class="category-btn" data-category="puzzle">
+              <span class="cat-icon">🧩</span>
+              <span class="cat-label">Puzzle</span>
+              <span class="cat-count">6</span>
+            </button>
+            <button class="category-btn" data-category="arcade">
+              <span class="cat-icon">👾</span>
+              <span class="cat-label">Arcade</span>
+              <span class="cat-count">8</span>
+            </button>
+            <button class="category-btn" data-category="strategy">
+              <span class="cat-icon">🏰</span>
+              <span class="cat-label">Strategy</span>
+              <span class="cat-count">1</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="sidebar-section">
+          <h3 class="sidebar-title">Your Stats</h3>
+          <div class="stats-grid">
+            <div class="stat-item">
+              <span class="stat-value" id="stat-played">0</span>
+              <span class="stat-label">Played</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value" id="stat-favorites">0</span>
+              <span class="stat-label">Favorites</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value" id="stat-achievements">3</span>
+              <span class="stat-label">Achievements</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value">42</span>
+              <span class="stat-label">Level</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Theme Switcher -->
+        <div class="sidebar-section">
+          <h3 class="sidebar-title">Theme</h3>
+          <div class="theme-switcher">
+            <button class="theme-btn active" data-theme="theme-dark" title="Dark">
+              <span class="theme-preview dark-preview"></span>Dark
+            </button>
+            <button class="theme-btn" data-theme="theme-neon" title="Neon">
+              <span class="theme-preview neon-preview"></span>Neon
+            </button>
+            <button class="theme-btn" data-theme="theme-cyber" title="Cyber">
+              <span class="theme-preview cyber-preview"></span>Cyber
+            </button>
+          </div>
+        </div>
+
+        <!-- Sidebar Footer -->
+        <div class="sidebar-footer">
+          <div class="platform-info">
+            <span class="platform-version">NEXUS v2.0</span>
+            <span class="platform-games">27 Games Available</span>
+          </div>
+        </div>
+
+      </div>
+    </aside>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="main-content" id="main-content">
+
+      <!-- Featured Banner -->
+      <section class="featured-section" id="featured-section">
+        <div class="featured-carousel" id="featured-carousel">
+          <!-- Dynamically generated -->
+        </div>
+        <div class="carousel-controls">
+          <button class="carousel-prev" id="carousel-prev">‹</button>
+          <div class="carousel-dots" id="carousel-dots"></div>
+          <button class="carousel-next" id="carousel-next">›</button>
+        </div>
+      </section>
+
+      <!-- Quick Stats Bar -->
+      <div class="quick-stats-bar">
+        <div class="qstat">
+          <span class="qstat-icon">🎮</span>
+          <span class="qstat-text"><strong>7</strong> Games</span>
+        </div>
+        <div class="qstat">
+          <span class="qstat-icon">🔥</span>
+          <span class="qstat-text"><strong id="qs-online">0</strong> Playing Now</span>
+        </div>
+        <div class="qstat">
+          <span class="qstat-icon">⭐</span>
+          <span class="qstat-text">Top Rated: <strong>Galaxy Defender</strong></span>
+        </div>
+        <div class="qstat">
+          <span class="qstat-icon">🏆</span>
+          <span class="qstat-text"><strong>24</strong> Achievements</span>
+        </div>
+      </div>
+
+      <!-- Recently Played -->
+      <section class="games-section" id="recent-section">
+        <div class="section-header">
+          <h2 class="section-title">
+            <span class="section-icon">🕐</span>
+            Recently Played
+          </h2>
+          <button class="see-all-btn">See All</button>
+        </div>
+        <div class="horizontal-scroll" id="recent-scroll">
+          <div class="empty-state" id="recent-empty">
+            <span>No recently played games. Start playing!</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Trending -->
+      <section class="games-section">
+        <div class="section-header">
+          <h2 class="section-title">
+            <span class="section-icon">🔥</span>
+            Trending Now
+          </h2>
+        </div>
+        <div class="horizontal-scroll" id="trending-scroll">
+          <!-- Dynamically generated -->
+        </div>
+      </section>
+
+      <!-- All Games Grid -->
+      <section class="games-section" id="all-games-section">
+        <div class="section-header">
+          <h2 class="section-title" id="grid-title">
+            <span class="section-icon">🎯</span>
+            All Games
+          </h2>
+          <div class="grid-controls">
+            <span class="game-count" id="game-count">7 games</span>
+            <button class="sort-btn active" data-sort="default">Default</button>
+            <button class="sort-btn" data-sort="rating">Rating</button>
+            <button class="sort-btn" data-sort="players">Players</button>
+          </div>
+        </div>
+        <div class="games-grid" id="games-grid">
+          <!-- Dynamically generated -->
+        </div>
+        <div class="empty-results" id="empty-results" style="display:none">
+          <div class="empty-icon">🔍</div>
+          <h3>No games found</h3>
+          <p>Try a different search or category</p>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ===== NOTIFICATIONS PANEL ===== -->
+  <div class="notifications-panel" id="notifications-panel">
+    <div class="notif-header">
+      <h3>Notifications</h3>
+      <button class="notif-clear-btn" id="notif-clear">Clear All</button>
+    </div>
+    <div class="notif-list" id="notif-list">
+      <div class="notif-item unread">
+        <span class="notif-dot"></span>
+        <div class="notif-content">
+          <strong>Welcome to NEXUS!</strong>
+          <span>Your gaming journey begins now.</span>
+          <time>Just now</time>
+        </div>
+      </div>
+      <div class="notif-item unread">
+        <span class="notif-dot"></span>
+        <div class="notif-content">
+          <strong>🏆 Achievement Unlocked</strong>
+          <span>First Login — Welcome to the arena!</span>
+          <time>Just now</time>
+        </div>
+      </div>
+      <div class="notif-item">
+        <div class="notif-content">
+          <strong>New Game Available</strong>
+          <span>Galaxy Defender v2 is now live!</span>
+          <time>1 hour ago</time>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ACHIEVEMENT TOAST ===== -->
+  <div class="achievement-toast" id="achievement-toast">
+    <div class="achievement-icon">🏆</div>
+    <div class="achievement-info">
+      <span class="achievement-label">Achievement Unlocked!</span>
+      <span class="achievement-name" id="achievement-name">First Blood</span>
+    </div>
+  </div>
+
+  <!-- ===== USER PROFILE PANEL ===== -->
+  <div class="profile-panel" id="profile-panel">
+    <div class="profile-header">
+      <div class="profile-avatar-large">Z</div>
+      <div class="profile-details">
+        <h3>Zaven</h3>
+        <span class="profile-rank">Elite Gamer</span>
+      </div>
+    </div>
+    <div class="profile-xp">
+      <div class="xp-label">
+        <span>Level 42</span>
+        <span>8,420 / 10,000 XP</span>
+      </div>
+      <div class="xp-bar">
+        <div class="xp-fill" style="width: 84.2%"></div>
+      </div>
+    </div>
+    <div class="profile-badges">
+      <span class="badge">🏆 Champion</span>
+      <span class="badge">🔥 Streak x7</span>
+      <span class="badge">⭐ Top Player</span>
+    </div>
+  </div>
+
+  <!-- Overlay -->
+  <div class="overlay" id="overlay"></div>
+
+  <script src="js/store.js"></script>
+  <script src="js/particles.js"></script>
+  <script src="js/main.js"></script>
+</body>
 </html>

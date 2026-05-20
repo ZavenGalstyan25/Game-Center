@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dead Zone — NEXUS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{--accent:#ef4444;--bg:#080810;--text:#e8eaff;--text2:#8892b0;}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{background:var(--bg);color:var(--text);font-family:'Exo 2',sans-serif;overflow:hidden;height:100vh;display:flex;flex-direction:column;}
+    #loading-screen{position:fixed;inset:0;z-index:1000;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;transition:opacity 0.6s;}
+    #loading-screen.hide{opacity:0;pointer-events:none;}
+    .load-logo{font-size:52px;font-weight:900;background:linear-gradient(135deg,#ef4444,#991b1b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:3px;}
+    .load-bar-wrap{width:280px;height:4px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden;}
+    .load-bar{height:100%;background:linear-gradient(90deg,#ef4444,#991b1b);width:0%;transition:width 0.3s;}
+    .top-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;background:rgba(8,8,16,0.9);backdrop-filter:blur(12px);border-bottom:1px solid rgba(239,68,68,0.15);flex-shrink:0;}
+    .back-btn{display:flex;align-items:center;gap:8px;padding:7px 16px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:8px;color:var(--text2);font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;transition:all 0.2s;font-family:'Exo 2',sans-serif;}
+    .back-btn:hover{border-color:var(--accent);color:var(--accent);}
+    .game-name{font-size:16px;font-weight:800;background:linear-gradient(135deg,#ef4444,#991b1b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .ctrl-btn{padding:7px 16px;border-radius:8px;font-size:13px;font-weight:700;border:1px solid rgba(255,255,255,0.15);color:var(--text);cursor:pointer;background:rgba(255,255,255,0.06);transition:all 0.2s;font-family:'Exo 2',sans-serif;margin-left:8px;}
+    .ctrl-btn:hover{background:rgba(255,255,255,0.12);}
+    .hud{display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding:8px 20px;background:rgba(8,8,16,0.7);border-bottom:1px solid rgba(239,68,68,0.1);flex-shrink:0;}
+    .hud-item{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text2);}
+    .hud-val{font-size:18px;font-weight:800;color:var(--accent);}
+    .hud-hp-bar{width:120px;height:10px;background:rgba(255,255,255,0.1);border-radius:5px;overflow:hidden;}
+    .hud-hp-fill{height:100%;background:linear-gradient(90deg,#ef4444,#ff6b6b);border-radius:5px;transition:width 0.3s;}
+    .hud-ammo{display:flex;gap:3px;align-items:center;}
+    .ammo-bullet{font-size:14px;}
+    .ammo-bullet.empty{opacity:0.2;}
+    .game-area{flex:1;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+    #gameCanvas{display:block;cursor:crosshair;}
+    .game-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);z-index:20;}
+    .game-overlay.hidden{display:none;}
+    .overlay-title{font-size:48px;font-weight:900;letter-spacing:4px;}
+    .overlay-sub{font-size:16px;color:var(--text2);}
+    .overlay-btn{padding:14px 40px;border-radius:10px;font-size:16px;font-weight:800;background:linear-gradient(135deg,#ef4444,#991b1b);color:#fff;border:none;cursor:pointer;letter-spacing:1px;text-transform:uppercase;font-family:'Exo 2',sans-serif;transition:all 0.2s;box-shadow:0 0 20px rgba(239,68,68,0.4);}
+    .overlay-btn:hover{transform:translateY(-2px);}
+    .controls-help{padding:10px 20px;background:rgba(8,8,16,0.7);border-top:1px solid rgba(239,68,68,0.1);display:flex;gap:24px;flex-wrap:wrap;align-items:center;flex-shrink:0;}
+    .ctrl-hint{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text2);}
+    .key{padding:2px 7px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:4px;font-size:11px;font-weight:700;color:var(--text);font-family:monospace;}
+    @media(max-width:600px){.controls-help{display:none;}}
+  </style>
+</head>
+<body>
+<div id="loading-screen">
+  <div class="load-logo">NEXUS</div>
+  <div style="font-size:20px;font-weight:600;color:var(--text2);letter-spacing:2px;">🧟 DEAD ZONE</div>
+  <div class="load-bar-wrap"><div class="load-bar" id="load-bar"></div></div>
+  <div style="font-size:12px;color:rgba(255,255,255,0.3);letter-spacing:2px;text-transform:uppercase">Spawning horde...</div>
+</div>
+<div class="top-bar">
+  <a href="../../index.html" class="back-btn">← Back to NEXUS</a>
+  <div style="display:flex;align-items:center;gap:10px;"><span style="font-size:22px">🧟</span><span class="game-name">DEAD ZONE</span></div>
+  <div><button class="ctrl-btn" id="pauseBtn">⏸ Pause</button><button class="ctrl-btn" id="restartBtn">↺ Restart</button></div>
+</div>
+<div class="hud">
+  <div class="hud-item">🏆 Score <span class="hud-val" id="scoreDisplay">0</span></div>
+  <div class="hud-item">❤️ HP <div class="hud-hp-bar"><div class="hud-hp-fill" id="hpFill" style="width:100%"></div></div><span id="hpNum" style="font-size:13px;font-weight:700;color:#ef4444;margin-left:6px">100</span></div>
+  <div class="hud-item">🌊 Wave <span class="hud-val" id="waveDisplay">1</span></div>
+  <div class="hud-item">🔫 Ammo <div class="hud-ammo" id="ammoDisplay"></div></div>
+  <div class="hud-item" style="margin-left:auto">💀 Kills <span class="hud-val" id="killsDisplay">0</span></div>
+</div>
+<div class="game-area">
+  <canvas id="gameCanvas"></canvas>
+  <div class="game-overlay" id="startOverlay">
+    <div style="font-size:80px">🧟</div>
+    <div class="overlay-title" style="background:linear-gradient(135deg,#ef4444,#991b1b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">DEAD ZONE</div>
+    <div class="overlay-sub">Survive the zombie apocalypse. Kill or be eaten!</div>
+    <button class="overlay-btn" id="startBtn">▶ SURVIVE</button>
+    <div style="font-size:13px;color:rgba(255,255,255,0.3);margin-top:8px">WASD Move · Mouse Aim · Click Shoot · R Reload</div>
+  </div>
+  <div class="game-overlay hidden" id="pauseOverlay">
+    <div class="overlay-title" style="color:#ef4444">⏸ PAUSED</div>
+    <button class="overlay-btn" id="resumeBtn">▶ Resume</button>
+  </div>
+  <div class="game-overlay hidden" id="gameOverOverlay">
+    <div style="font-size:64px">☠️</div>
+    <div class="overlay-title" style="color:#ef4444">YOU DIED</div>
+    <div class="overlay-score" id="finalScore" style="font-size:22px;font-weight:700;color:#ef4444">Score: 0</div>
+    <div id="finalWave" style="font-size:16px;color:var(--text2)">Wave 1 · 0 kills</div>
+    <button class="overlay-btn" id="retryBtn">↺ Try Again</button>
+    <a href="../../index.html" style="font-size:13px;color:var(--text2);text-decoration:underline;margin-top:-8px">Return to NEXUS</a>
+  </div>
+  <div id="reloadOverlay" style="position:absolute;bottom:100px;left:50%;transform:translateX(-50%);display:none;background:rgba(0,0,0,0.7);border:1px solid #ef4444;padding:8px 18px;border-radius:8px;font-size:14px;font-weight:700;color:#ef4444">🔄 RELOADING...</div>
+</div>
+<div class="controls-help">
+  <div class="ctrl-hint"><span class="key">W</span><span class="key">A</span><span class="key">S</span><span class="key">D</span> Move</div>
+  <div class="ctrl-hint"><span class="key">Mouse</span> Aim</div>
+  <div class="ctrl-hint"><span class="key">Click</span> Shoot</div>
+  <div class="ctrl-hint"><span class="key">R</span> Reload</div>
+  <div class="ctrl-hint"><span class="key">P</span> Pause</div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>

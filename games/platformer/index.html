@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pixel Jumper — NEXUS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{--accent:#a855f7;--bg:#080810;--text:#e8eaff;--text2:#8892b0;}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{background:var(--bg);color:var(--text);font-family:'Exo 2',sans-serif;overflow:hidden;height:100vh;display:flex;flex-direction:column;}
+    #loading-screen{position:fixed;inset:0;z-index:1000;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;transition:opacity 0.6s;}
+    #loading-screen.hide{opacity:0;pointer-events:none;}
+    .load-logo{font-size:52px;font-weight:900;background:linear-gradient(135deg,#a855f7,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:3px;}
+    .load-bar-wrap{width:280px;height:4px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden;}
+    .load-bar{height:100%;background:linear-gradient(90deg,#a855f7,#ec4899);width:0%;transition:width 0.3s;}
+    .top-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;background:rgba(8,8,16,0.9);backdrop-filter:blur(12px);border-bottom:1px solid rgba(168,85,247,0.15);flex-shrink:0;}
+    .back-btn{display:flex;align-items:center;gap:8px;padding:7px 16px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:8px;color:var(--text2);font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;transition:all 0.2s;font-family:'Exo 2',sans-serif;}
+    .back-btn:hover{border-color:var(--accent);color:var(--accent);}
+    .game-name{font-size:16px;font-weight:800;background:linear-gradient(135deg,#a855f7,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .ctrl-btn{padding:7px 16px;border-radius:8px;font-size:13px;font-weight:700;border:1px solid rgba(255,255,255,0.15);color:var(--text);cursor:pointer;background:rgba(255,255,255,0.06);transition:all 0.2s;font-family:'Exo 2',sans-serif;margin-left:8px;}
+    .ctrl-btn:hover{background:rgba(255,255,255,0.12);}
+    .hud{display:flex;align-items:center;gap:24px;flex-wrap:wrap;padding:8px 20px;background:rgba(8,8,16,0.7);border-bottom:1px solid rgba(168,85,247,0.1);flex-shrink:0;}
+    .hud-item{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text2);}
+    .hud-val{font-size:18px;font-weight:800;color:var(--accent);}
+    .hud-lives{display:flex;gap:4px;}
+    .life-icon{font-size:18px;transition:all 0.3s;}
+    .life-icon.empty{filter:grayscale(1) opacity(0.3);}
+    .game-area{flex:1;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+    #gameCanvas{display:block;}
+    .game-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);z-index:20;}
+    .game-overlay.hidden{display:none;}
+    .overlay-title{font-size:48px;font-weight:900;letter-spacing:4px;}
+    .overlay-sub{font-size:16px;color:var(--text2);}
+    .overlay-btn{padding:14px 40px;border-radius:10px;font-size:16px;font-weight:800;background:linear-gradient(135deg,#a855f7,#ec4899);color:#fff;border:none;cursor:pointer;letter-spacing:1px;text-transform:uppercase;font-family:'Exo 2',sans-serif;transition:all 0.2s;box-shadow:0 0 20px rgba(168,85,247,0.4);}
+    .overlay-btn:hover{transform:translateY(-2px);}
+    .controls-help{padding:10px 20px;background:rgba(8,8,16,0.7);border-top:1px solid rgba(168,85,247,0.1);display:flex;gap:24px;flex-wrap:wrap;align-items:center;flex-shrink:0;}
+    .ctrl-hint{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text2);}
+    .key{padding:2px 7px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:4px;font-size:11px;font-weight:700;color:var(--text);font-family:monospace;}
+    @media(max-width:600px){.controls-help{display:none;}}
+    @keyframes bounce{0%{transform:scale(0.5);opacity:0}60%{transform:scale(1.2);opacity:1}80%{transform:scale(0.95)}100%{transform:scale(1)}}
+  </style>
+</head>
+<body>
+<div id="loading-screen">
+  <div class="load-logo">NEXUS</div>
+  <div style="font-size:20px;font-weight:600;color:var(--text2);letter-spacing:2px;">🕹️ PIXEL JUMPER</div>
+  <div class="load-bar-wrap"><div class="load-bar" id="load-bar"></div></div>
+  <div style="font-size:12px;color:rgba(255,255,255,0.3);letter-spacing:2px;text-transform:uppercase">Building levels...</div>
+</div>
+<div class="top-bar">
+  <a href="../../index.html" class="back-btn">← Back to NEXUS</a>
+  <div style="display:flex;align-items:center;gap:10px;"><span style="font-size:22px">🕹️</span><span class="game-name">PIXEL JUMPER</span></div>
+  <div><button class="ctrl-btn" id="pauseBtn">⏸ Pause</button><button class="ctrl-btn" id="restartBtn">↺ Restart</button></div>
+</div>
+<div class="hud">
+  <div class="hud-item">🏆 Score <span class="hud-val" id="scoreDisplay">0</span></div>
+  <div class="hud-item">💰 Coins <span class="hud-val" id="coinDisplay">0</span></div>
+  <div class="hud-item">🗺️ Level <span class="hud-val" id="levelDisplay">1</span></div>
+  <div class="hud-item" style="margin-left:auto">❤️ Lives <div class="hud-lives" id="livesDisplay"><span class="life-icon">❤️</span><span class="life-icon">❤️</span><span class="life-icon">❤️</span></div></div>
+</div>
+<div class="game-area">
+  <canvas id="gameCanvas"></canvas>
+  <div class="game-overlay" id="startOverlay">
+    <div style="font-size:80px;animation:bounce 0.6s ease-out">🕹️</div>
+    <div class="overlay-title" style="background:linear-gradient(135deg,#a855f7,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">PIXEL JUMPER</div>
+    <div class="overlay-sub">Jump through 3 neon-lit levels. Collect coins, beat enemies!</div>
+    <button class="overlay-btn" id="startBtn">▶ START JUMPING</button>
+    <div style="font-size:13px;color:rgba(255,255,255,0.3);margin-top:8px">A/D or ←→ Move · W / Space / ↑ Jump</div>
+  </div>
+  <div class="game-overlay hidden" id="pauseOverlay">
+    <div class="overlay-title" style="color:#a855f7">⏸ PAUSED</div>
+    <button class="overlay-btn" id="resumeBtn">▶ Resume</button>
+  </div>
+  <div class="game-overlay hidden" id="gameOverOverlay">
+    <div style="font-size:64px">💀</div>
+    <div class="overlay-title" style="color:#ef4444">GAME OVER</div>
+    <div class="overlay-score" id="finalScore" style="font-size:22px;font-weight:700;color:#a855f7">Score: 0</div>
+    <button class="overlay-btn" id="retryBtn">↺ Try Again</button>
+    <a href="../../index.html" style="font-size:13px;color:var(--text2);text-decoration:underline;margin-top:-8px">Return to NEXUS</a>
+  </div>
+  <div class="game-overlay hidden" id="winOverlay">
+    <div style="font-size:64px">🏆</div>
+    <div class="overlay-title" style="background:linear-gradient(135deg,#f59e0b,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">YOU WIN!</div>
+    <div id="winScore" style="font-size:22px;font-weight:700;color:#f59e0b">Score: 0</div>
+    <button class="overlay-btn" id="replayBtn" style="background:linear-gradient(135deg,#f59e0b,#ec4899)">↺ Play Again</button>
+    <a href="../../index.html" style="font-size:13px;color:var(--text2);text-decoration:underline;margin-top:-8px">Return to NEXUS</a>
+  </div>
+</div>
+<div class="controls-help">
+  <div class="ctrl-hint"><span class="key">A</span><span class="key">D</span> or <span class="key">←</span><span class="key">→</span> Move</div>
+  <div class="ctrl-hint"><span class="key">W</span> or <span class="key">Space</span> Jump (double jump!)</div>
+  <div class="ctrl-hint"><span class="key">P</span> Pause</div>
+  <div class="ctrl-hint">Reach the 🚪 door to advance!</div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>

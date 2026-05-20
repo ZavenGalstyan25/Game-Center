@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-ChildItem -Recurse \"C:\\\\Users\\\\Zav\\\\Desktop\\\\Game-Center\" | Where-Object { !$_.PSIsContainer } | Select-Object FullName, Length | Format-Table -AutoSize)",
+      "PowerShell(New-Item *)"
+    ]
+  }
+}

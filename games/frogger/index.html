@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Cyber Crossy — NEXUS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/game.css">
+  <style>:root{--grad:linear-gradient(135deg,#10b981,#f59e0b);--bord:rgba(16,185,129,.2);--accent:#10b981;}</style>
+</head>
+<body>
+<div id="loading-screen"><div class="load-logo">NEXUS</div><div class="load-title">🐸 CYBER CROSSY</div><div class="load-bar-wrap"><div class="load-bar" id="load-bar"></div></div><div class="load-hint">Building lanes...</div></div>
+<div class="top-bar">
+  <a href="../../index.html" class="back-btn">← Back to NEXUS</a>
+  <div class="game-title-bar"><span class="game-emoji-sm">🐸</span><span class="game-name">CYBER CROSSY</span></div>
+  <div class="ctrl-btns"><button class="ctrl-btn" id="pauseBtn">⏸ Pause</button><button class="ctrl-btn" id="restartBtn">↺ Restart</button></div>
+</div>
+<div class="hud">
+  <div class="hud-item">🏆 Score <span class="hud-val" id="scoreDisplay">0</span></div>
+  <div class="hud-item">❤️ Lives <span class="hud-val" id="livesDisplay">3</span></div>
+  <div class="hud-item">🌊 Round <span class="hud-val" id="roundDisplay">1</span></div>
+  <div class="hud-item" style="margin-left:auto">Best <span class="hud-val" id="bestDisplay">0</span></div>
+</div>
+<div class="game-area" style="background:#050508;">
+  <canvas id="gameCanvas"></canvas>
+  <div class="game-overlay" id="startOverlay">
+    <div class="overlay-emoji">🐸</div>
+    <div class="overlay-title overlay-grad">CYBER CROSSY</div>
+    <div class="overlay-sub">Cross the lanes, avoid vehicles, reach safety!</div>
+    <button class="overlay-btn" id="startBtn">▶ START GAME</button>
+    <div class="overlay-hint">Arrow Keys / WASD to hop</div>
+  </div>
+  <div class="game-overlay hidden" id="pauseOverlay">
+    <div class="overlay-title" style="color:#10b981">⏸ PAUSED</div>
+    <button class="overlay-btn" id="resumeBtn">▶ Resume</button>
+  </div>
+  <div class="game-overlay hidden" id="gameOverOverlay">
+    <div style="font-size:64px">🚗</div>
+    <div class="overlay-title" style="color:#ef4444">SQUISHED!</div>
+    <div class="overlay-score" id="finalScore">Score: 0</div>
+    <button class="overlay-btn" id="retryBtn">↺ Try Again</button>
+    <a href="../../index.html" class="overlay-link">Return to NEXUS</a>
+  </div>
+</div>
+<div class="controls-help">
+  <div class="ctrl-hint"><span class="key">↑↓←→</span> Hop</div>
+  <div class="ctrl-hint"><span class="key">WASD</span> Hop</div>
+  <div class="ctrl-hint"><span class="key">P</span> Pause</div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>

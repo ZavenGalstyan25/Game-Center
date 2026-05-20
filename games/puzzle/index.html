@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2048 Neon — NEXUS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{--accent:#00d4ff;--bg:#080810;--text:#e8eaff;--text2:#8892b0;}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{background:var(--bg);color:var(--text);font-family:'Exo 2',sans-serif;overflow:hidden;height:100vh;display:flex;flex-direction:column;}
+    #loading-screen{position:fixed;inset:0;z-index:1000;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;transition:opacity 0.6s;}
+    #loading-screen.hide{opacity:0;pointer-events:none;}
+    .load-logo{font-size:52px;font-weight:900;background:linear-gradient(135deg,#00d4ff,#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:3px;}
+    .load-bar-wrap{width:280px;height:4px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden;}
+    .load-bar{height:100%;background:linear-gradient(90deg,#00d4ff,#7c3aed);width:0%;transition:width 0.3s;}
+    .top-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;background:rgba(8,8,16,0.9);backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,212,255,0.15);flex-shrink:0;}
+    .back-btn{display:flex;align-items:center;gap:8px;padding:7px 16px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:8px;color:var(--text2);font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;transition:all 0.2s;font-family:'Exo 2',sans-serif;}
+    .back-btn:hover{border-color:var(--accent);color:var(--accent);}
+    .game-name{font-size:16px;font-weight:800;background:linear-gradient(135deg,#00d4ff,#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .ctrl-btn{padding:7px 16px;border-radius:8px;font-size:13px;font-weight:700;border:1px solid rgba(255,255,255,0.15);color:var(--text);cursor:pointer;background:rgba(255,255,255,0.06);transition:all 0.2s;font-family:'Exo 2',sans-serif;margin-left:8px;}
+    .ctrl-btn:hover{background:rgba(255,255,255,0.12);}
+    .hud{display:flex;align-items:center;justify-content:center;gap:24px;flex-wrap:wrap;padding:10px 20px;background:rgba(8,8,16,0.7);border-bottom:1px solid rgba(0,212,255,0.1);flex-shrink:0;}
+    .score-box{display:flex;flex-direction:column;align-items:center;padding:10px 24px;background:rgba(0,212,255,0.05);border:1px solid rgba(0,212,255,0.2);border-radius:12px;}
+    .score-label{font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:2px;}
+    .score-val{font-size:24px;font-weight:900;color:var(--accent);}
+    .game-area{flex:1;display:flex;align-items:center;justify-content:center;padding:20px;}
+    #game-container{display:flex;flex-direction:column;align-items:center;gap:20px;}
+    #grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:14px;background:rgba(0,0,0,0.4);border:2px solid rgba(0,212,255,0.2);border-radius:16px;box-shadow:0 0 40px rgba(0,212,255,0.15);backdrop-filter:blur(10px);}
+    .cell{width:90px;height:90px;display:flex;align-items:center;justify-content:center;border-radius:10px;font-weight:900;transition:all 0.12s ease;font-family:'Exo 2',sans-serif;position:relative;overflow:hidden;}
+    .cell[data-val="0"]{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.05);}
+    .game-overlay{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);z-index:20;}
+    .game-overlay.hidden{display:none;}
+    .overlay-title{font-size:48px;font-weight:900;letter-spacing:4px;}
+    .overlay-sub{font-size:16px;color:var(--text2);}
+    .overlay-btn{padding:14px 40px;border-radius:10px;font-size:16px;font-weight:800;background:linear-gradient(135deg,#00d4ff,#7c3aed);color:#fff;border:none;cursor:pointer;letter-spacing:1px;text-transform:uppercase;font-family:'Exo 2',sans-serif;transition:all 0.2s;box-shadow:0 0 20px rgba(0,212,255,0.4);}
+    .overlay-btn:hover{transform:translateY(-2px);}
+    .controls-help{padding:10px 20px;background:rgba(8,8,16,0.7);border-top:1px solid rgba(0,212,255,0.1);display:flex;gap:24px;flex-wrap:wrap;align-items:center;justify-content:center;flex-shrink:0;}
+    .ctrl-hint{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text2);}
+    .key{padding:2px 7px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:4px;font-size:11px;font-weight:700;color:var(--text);font-family:monospace;}
+    @media(max-width:480px){.cell{width:68px;height:68px;font-size:18px!important;} #grid{gap:7px;padding:10px;} }
+  </style>
+</head>
+<body>
+<div id="loading-screen">
+  <div class="load-logo">NEXUS</div>
+  <div style="font-size:20px;font-weight:600;color:var(--text2);letter-spacing:2px;">🧩 2048 NEON</div>
+  <div class="load-bar-wrap"><div class="load-bar" id="load-bar"></div></div>
+</div>
+<div class="top-bar">
+  <a href="../../index.html" class="back-btn">← Back to NEXUS</a>
+  <div style="display:flex;align-items:center;gap:10px;"><span style="font-size:22px">🧩</span><span class="game-name">2048 NEON</span></div>
+  <div><button class="ctrl-btn" id="newGameBtn">↺ New Game</button></div>
+</div>
+<div class="hud">
+  <div class="score-box"><div class="score-label">Score</div><div class="score-val" id="scoreDisplay">0</div></div>
+  <div class="score-box" style="border-color:rgba(124,58,237,0.3);background:rgba(124,58,237,0.05)"><div class="score-label" style="color:#a855f7">Best</div><div class="score-val" style="color:#a855f7" id="bestDisplay">0</div></div>
+  <div class="score-box" style="border-color:rgba(245,158,11,0.3);background:rgba(245,158,11,0.05)"><div class="score-label" style="color:#f59e0b">Target</div><div class="score-val" style="color:#f59e0b">2048</div></div>
+</div>
+<div class="game-area">
+  <div id="game-container">
+    <div id="grid"></div>
+    <div style="font-size:13px;color:var(--text2);text-align:center">Merge tiles to reach <strong style="color:#00d4ff">2048</strong>!</div>
+  </div>
+</div>
+<div class="game-overlay hidden" id="startOverlay">
+  <div style="font-size:80px">🧩</div>
+  <div class="overlay-title" style="background:linear-gradient(135deg,#00d4ff,#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">2048 NEON</div>
+  <div class="overlay-sub">Merge tiles with the same number to reach 2048!</div>
+  <button class="overlay-btn" id="startBtn">▶ START GAME</button>
+</div>
+<div class="game-overlay hidden" id="winOverlay">
+  <div style="font-size:64px">🏆</div>
+  <div class="overlay-title" style="color:#f59e0b">YOU WIN!</div>
+  <div id="winScore" style="font-size:22px;font-weight:700;color:#00d4ff"></div>
+  <button class="overlay-btn" id="keepBtn">Continue Playing</button>
+  <button class="overlay-btn" id="winNewBtn" style="background:rgba(255,255,255,0.1);box-shadow:none;border:1px solid rgba(255,255,255,0.2)">New Game</button>
+</div>
+<div class="game-overlay hidden" id="loseOverlay">
+  <div style="font-size:64px">😢</div>
+  <div class="overlay-title" style="color:#ef4444">GAME OVER</div>
+  <div id="loseScore" style="font-size:22px;font-weight:700;color:#00d4ff"></div>
+  <button class="overlay-btn" id="loseNewBtn">↺ Try Again</button>
+  <a href="../../index.html" style="font-size:13px;color:var(--text2);text-decoration:underline;margin-top:-8px">Return to NEXUS</a>
+</div>
+<div class="controls-help">
+  <div class="ctrl-hint"><span class="key">←↑→↓</span> or <span class="key">WASD</span> Slide tiles</div>
+  <div class="ctrl-hint">Swipe on mobile</div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>

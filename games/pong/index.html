@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Pong Battle — NEXUS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/game.css">
+  <style>:root{--grad:linear-gradient(135deg,#00d4ff,#a855f7);--bord:rgba(0,212,255,.2);--accent:#00d4ff;}</style>
+</head>
+<body>
+<div id="loading-screen"><div class="load-logo">NEXUS</div><div class="load-title">🏓 PONG BATTLE</div><div class="load-bar-wrap"><div class="load-bar" id="load-bar"></div></div><div class="load-hint">Setting up arena...</div></div>
+<div class="top-bar">
+  <a href="../../index.html" class="back-btn">← Back to NEXUS</a>
+  <div class="game-title-bar"><span class="game-emoji-sm">🏓</span><span class="game-name">PONG BATTLE</span></div>
+  <div class="ctrl-btns"><button class="ctrl-btn" id="pauseBtn">⏸ Pause</button><button class="ctrl-btn" id="restartBtn">↺ Restart</button></div>
+</div>
+<div class="hud">
+  <div class="hud-item">🟦 You <span class="hud-val" id="p1Score">0</span></div>
+  <div class="hud-item">🤖 CPU <span class="hud-val" id="p2Score">0</span></div>
+  <div class="hud-item" style="margin-left:auto">First to <span class="hud-val">7</span></div>
+</div>
+<div class="game-area" style="background:#050508;">
+  <canvas id="gameCanvas"></canvas>
+  <div class="game-overlay" id="startOverlay">
+    <div class="overlay-emoji">🏓</div>
+    <div class="overlay-title overlay-grad">PONG BATTLE</div>
+    <div class="overlay-sub">First to 7 wins! Beware of power-ups!</div>
+    <button class="overlay-btn" id="startBtn">▶ START GAME</button>
+    <div class="overlay-hint">W/S or ↑↓ to move your paddle</div>
+  </div>
+  <div class="game-overlay hidden" id="pauseOverlay">
+    <div class="overlay-title" style="color:#00d4ff">⏸ PAUSED</div>
+    <button class="overlay-btn" id="resumeBtn">▶ Resume</button>
+  </div>
+  <div class="game-overlay hidden" id="winOverlay">
+    <div class="overlay-emoji" id="winEmoji">🏆</div>
+    <div class="overlay-title overlay-grad" id="winText">YOU WIN!</div>
+    <button class="overlay-btn" id="retryBtn">↺ Play Again</button>
+    <a href="../../index.html" class="overlay-link">Return to NEXUS</a>
+  </div>
+</div>
+<div class="controls-help">
+  <div class="ctrl-hint"><span class="key">W/S</span> Move</div>
+  <div class="ctrl-hint"><span class="key">↑↓</span> Move</div>
+  <div class="ctrl-hint"><span class="key">P</span> Pause</div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Air Hockey Pro — NEXUS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/game.css">
+  <style>:root{--grad:linear-gradient(135deg,#00d4ff,#10b981);--bord:rgba(0,212,255,.2);--accent:#00d4ff;}
+  #gameCanvas{cursor:none;}</style>
+</head>
+<body>
+<div id="loading-screen"><div class="load-logo">NEXUS</div><div class="load-title">🏒 AIR HOCKEY PRO</div><div class="load-bar-wrap"><div class="load-bar" id="load-bar"></div></div><div class="load-hint">Flooding the rink...</div></div>
+<div class="top-bar">
+  <a href="../../index.html" class="back-btn">← Back to NEXUS</a>
+  <div class="game-title-bar"><span class="game-emoji-sm">🏒</span><span class="game-name">AIR HOCKEY PRO</span></div>
+  <div class="ctrl-btns"><button class="ctrl-btn" id="restartBtn">↺ Restart</button></div>
+</div>
+<div class="hud">
+  <div class="hud-item">🟦 You <span class="hud-val" id="p1Score">0</span></div>
+  <div class="hud-item">🤖 CPU <span class="hud-val" id="p2Score">0</span></div>
+  <div class="hud-item" style="margin-left:auto">First to <span class="hud-val">7</span></div>
+</div>
+<div class="game-area" style="background:#050508;">
+  <canvas id="gameCanvas"></canvas>
+  <div class="game-overlay" id="startOverlay">
+    <div class="overlay-emoji">🏒</div>
+    <div class="overlay-title overlay-grad">AIR HOCKEY PRO</div>
+    <div class="overlay-sub">Move your paddle with the mouse! First to 7 wins!</div>
+    <button class="overlay-btn" id="startBtn">▶ START GAME</button>
+    <div class="overlay-hint">Mouse to control your paddle</div>
+  </div>
+  <div class="game-overlay hidden" id="winOverlay">
+    <div class="overlay-emoji" id="winEmoji">🏆</div>
+    <div class="overlay-title overlay-grad" id="winText">YOU WIN!</div>
+    <button class="overlay-btn" id="retryBtn">↺ Play Again</button>
+    <a href="../../index.html" class="overlay-link">Return to NEXUS</a>
+  </div>
+</div>
+<div class="controls-help">
+  <div class="ctrl-hint"><span class="key">Mouse</span> Move your paddle</div>
+  <div class="ctrl-hint"><span class="key">Bottom half</span> is your zone</div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>

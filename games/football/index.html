@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Street Football — NEXUS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{--accent:#10b981;--bg:#080810;--text:#e8eaff;--text2:#8892b0;}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{background:var(--bg);color:var(--text);font-family:'Exo 2',sans-serif;overflow:hidden;height:100vh;display:flex;flex-direction:column;}
+    #loading-screen{position:fixed;inset:0;z-index:1000;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;transition:opacity 0.6s;}
+    #loading-screen.hide{opacity:0;pointer-events:none;}
+    .load-logo{font-size:52px;font-weight:900;background:linear-gradient(135deg,#10b981,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:3px;}
+    .load-bar-wrap{width:280px;height:4px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden;}
+    .load-bar{height:100%;background:linear-gradient(90deg,#10b981,#3b82f6);width:0%;transition:width 0.3s;}
+    .top-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;background:rgba(8,8,16,0.9);backdrop-filter:blur(12px);border-bottom:1px solid rgba(16,185,129,0.15);flex-shrink:0;}
+    .back-btn{display:flex;align-items:center;gap:8px;padding:7px 16px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:8px;color:var(--text2);font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;transition:all 0.2s;font-family:'Exo 2',sans-serif;}
+    .back-btn:hover{border-color:var(--accent);color:var(--accent);}
+    .game-name{font-size:16px;font-weight:800;background:linear-gradient(135deg,#10b981,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .ctrl-btn{padding:7px 16px;border-radius:8px;font-size:13px;font-weight:700;border:1px solid rgba(255,255,255,0.15);color:var(--text);cursor:pointer;background:rgba(255,255,255,0.06);transition:all 0.2s;font-family:'Exo 2',sans-serif;margin-left:8px;}
+    .ctrl-btn:hover{background:rgba(255,255,255,0.12);}
+    .scoreboard{display:flex;align-items:center;justify-content:center;gap:24px;padding:10px 20px;background:rgba(8,8,16,0.8);border-bottom:1px solid rgba(16,185,129,0.12);flex-shrink:0;}
+    .team-score{display:flex;flex-direction:column;align-items:center;gap:2px;}
+    .team-name{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text2);}
+    .team-goal{font-size:36px;font-weight:900;}
+    .score-divider{font-size:24px;font-weight:700;color:var(--text2);}
+    .timer-display{font-size:22px;font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums;padding:0 20px;}
+    .game-area{flex:1;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+    #gameCanvas{display:block;}
+    .game-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);z-index:20;}
+    .game-overlay.hidden{display:none;}
+    .overlay-title{font-size:48px;font-weight:900;letter-spacing:4px;}
+    .overlay-sub{font-size:16px;color:var(--text2);}
+    .overlay-btn{padding:14px 40px;border-radius:10px;font-size:16px;font-weight:800;background:linear-gradient(135deg,#10b981,#3b82f6);color:#fff;border:none;cursor:pointer;letter-spacing:1px;text-transform:uppercase;font-family:'Exo 2',sans-serif;transition:all 0.2s;box-shadow:0 0 20px rgba(16,185,129,0.4);}
+    .overlay-btn:hover{transform:translateY(-2px);}
+    .controls-help{padding:10px 20px;background:rgba(8,8,16,0.7);border-top:1px solid rgba(16,185,129,0.1);display:flex;gap:24px;flex-wrap:wrap;align-items:center;flex-shrink:0;}
+    .ctrl-hint{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text2);}
+    .key{padding:2px 7px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:4px;font-size:11px;font-weight:700;color:var(--text);font-family:monospace;}
+    @media(max-width:600px){.controls-help{display:none;}}
+  </style>
+</head>
+<body>
+<div id="loading-screen">
+  <div class="load-logo">NEXUS</div>
+  <div style="font-size:20px;font-weight:600;color:var(--text2);letter-spacing:2px;">⚽ STREET FOOTBALL</div>
+  <div class="load-bar-wrap"><div class="load-bar" id="load-bar"></div></div>
+  <div style="font-size:12px;color:rgba(255,255,255,0.3);letter-spacing:2px;text-transform:uppercase">Loading pitch...</div>
+</div>
+<div class="top-bar">
+  <a href="../../index.html" class="back-btn">← Back to NEXUS</a>
+  <div style="display:flex;align-items:center;gap:10px;"><span style="font-size:22px">⚽</span><span class="game-name">STREET FOOTBALL</span></div>
+  <div><button class="ctrl-btn" id="pauseBtn">⏸ Pause</button><button class="ctrl-btn" id="restartBtn">↺ Restart</button></div>
+</div>
+<div class="scoreboard">
+  <div class="team-score">
+    <div class="team-name" style="color:#00d4ff">YOU</div>
+    <div class="team-goal" style="color:#00d4ff" id="score1">0</div>
+  </div>
+  <div>
+    <div class="timer-display" id="timerDisplay">2:00</div>
+    <div class="score-divider" style="text-align:center">vs</div>
+  </div>
+  <div class="team-score">
+    <div class="team-name" style="color:#ef4444">CPU</div>
+    <div class="team-goal" style="color:#ef4444" id="score2">0</div>
+  </div>
+</div>
+<div class="game-area">
+  <canvas id="gameCanvas"></canvas>
+  <div class="game-overlay" id="startOverlay">
+    <div style="font-size:80px">⚽</div>
+    <div class="overlay-title" style="background:linear-gradient(135deg,#10b981,#3b82f6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">STREET FOOTBALL</div>
+    <div class="overlay-sub">Score more goals than the CPU in 2 minutes!</div>
+    <button class="overlay-btn" id="startBtn">▶ KICK OFF</button>
+    <div style="font-size:13px;color:rgba(255,255,255,0.3);margin-top:8px">WASD / Arrow Keys to move · Space to kick</div>
+  </div>
+  <div class="game-overlay hidden" id="pauseOverlay">
+    <div class="overlay-title" style="color:#10b981">⏸ PAUSED</div>
+    <button class="overlay-btn" id="resumeBtn">▶ Resume</button>
+  </div>
+  <div class="game-overlay hidden" id="endOverlay">
+    <div style="font-size:64px" id="endEmoji">🏆</div>
+    <div class="overlay-title" id="endTitle" style="color:#10b981">YOU WIN!</div>
+    <div class="overlay-score" id="endScore" style="font-size:24px;font-weight:700">3 - 1</div>
+    <button class="overlay-btn" id="retryBtn">↺ Play Again</button>
+    <a href="../../index.html" style="font-size:13px;color:var(--text2);text-decoration:underline;margin-top:-8px">Return to NEXUS</a>
+  </div>
+  <div id="goalAnnounce" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:none;font-size:56px;font-weight:900;letter-spacing:4px;text-shadow:0 0 30px currentColor;z-index:30;pointer-events:none"></div>
+</div>
+<div class="controls-help">
+  <div class="ctrl-hint"><span class="key">W</span><span class="key">A</span><span class="key">S</span><span class="key">D</span> or <span class="key">↑←↓→</span> Move</div>
+  <div class="ctrl-hint"><span class="key">Space</span> Kick ball</div>
+  <div class="ctrl-hint"><span class="key">P</span> Pause</div>
+  <div class="ctrl-hint">Blue = You · Red = CPU</div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>
