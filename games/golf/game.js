@@ -95,7 +95,8 @@ function update(){
     const dist=Math.hypot(b.x-bm.x,b.y-bm.y);
     if(dist<b.r+bm.r){
       const nx=(b.x-bm.x)/dist,ny=(b.y-bm.y)/dist;
-      b.vx=nx*Math.hypot(b.vx,b.vy)*1.1;b.vy=ny*Math.hypot(b.vx,b.vy)*1.1;
+      const spd=Math.hypot(b.vx,b.vy)*1.1;
+      b.vx=nx*spd;b.vy=ny*spd;
       b.x=bm.x+nx*(b.r+bm.r+1);b.y=bm.y+ny*(b.r+bm.r+1);
       spawnParticles(b.x,b.y,'#f59e0b');
     }

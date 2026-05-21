@@ -253,6 +253,7 @@ const App = (() => {
   function checkAchievements() {
     const recent = Store.getRecentlyPlayed();
     if (recent.length >= 3 && Store.unlockAchievement('play_3')) showAchievement('play_3');
+    if (recent.length >= 10 && Store.unlockAchievement('play_10')) showAchievement('play_10');
     if (recent.length >= GAMES.length && Store.unlockAchievement('play_all')) showAchievement('play_all');
     if (Store.getFavorites().length >= 1 && Store.unlockAchievement('first_fav')) showAchievement('first_fav');
     updateStats();

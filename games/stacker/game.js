@@ -29,7 +29,7 @@ function initGame(){
 function getColor(i){return COLORS[(i||G.colorIdx)%COLORS.length];}
 
 function spawnRow(){
-  G.current={x:0,w:Math.min(COLS,G.stack.length===0?COLS:G.stack[G.stack.length-1].w+1),
+  G.current={x:0,w:Math.min(COLS,G.stack.length===0?COLS:G.stack[G.stack.length-1].w),
     dir:1,speed:Math.min(6,1.5+G.level*0.3)};
   if(G.stack.length===0)G.current.w=COLS;
 }

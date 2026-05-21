@@ -6,7 +6,7 @@ const CELL=40;
 
 // Map: 0=buildable, 1=wall/decoration, P=path
 const MAP_TEMPLATE=[
-  '111111111111111111',
+  '11111111111111111',
   '1P000000001000001',
   '1P111111001000001',
   '1P111111001000001',
@@ -53,8 +53,8 @@ function buildPath(){
     if(MAP_TEMPLATE[r][c]==='P'||MAP_TEMPLATE[r][c]==='X')path.push({r,c});
   }
   // Sort path: follow connected neighbors
-  const sorted=[path.find(p=>MAP_TEMPLATE[p.r][p.c]==='P'&&p.c===0)];
-  if(!sorted[0])sorted.push(path[0]);
+  const firstP=path.find(p=>MAP_TEMPLATE[p.r][p.c]==='P'&&p.c===0)||path[0];
+  const sorted=[firstP];
   const visited=new Set([`${sorted[0].r},${sorted[0].c}`]);
   while(sorted.length<path.length){
     const last=sorted[sorted.length-1];
