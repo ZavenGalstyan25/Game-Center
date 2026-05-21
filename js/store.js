@@ -1,5 +1,5 @@
 /* ============================================================
-   NEXUS GAMING CENTER — STORE / DATA LAYER
+   NEXUS BOOM GAMES — STORE / DATA LAYER
    ============================================================ */
 
 const GAMES = [

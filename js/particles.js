@@ -1,5 +1,5 @@
 /* ============================================================
-   NEXUS GAMING CENTER — PARTICLE SYSTEM
+   NEXUS BOOM GAMES — PARTICLE SYSTEM
    ============================================================ */
 
 const ParticleSystem = (() => {

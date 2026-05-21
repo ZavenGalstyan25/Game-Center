@@ -1,5 +1,5 @@
 /* ============================================================
-   NEXUS GAMING CENTER — MAIN APPLICATION
+   NEXUS BOOM GAMES — MAIN APPLICATION
    ============================================================ */
 
 document.addEventListener('DOMContentLoaded', () => {
